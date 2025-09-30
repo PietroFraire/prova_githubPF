@@ -1,10 +1,20 @@
 public class Griglia{
     private int dimensioneR;
     private int dimensioneC;
+    private int found;
+    private casella casella[][];
 
     public Griglia(int dimensioneR, int dimensioneC){
     this.dimensioneR = dimensioneR;
     this.dimensioneC = dimensioneC;
+    this.found = 0;
+    this.casella = new casella[dimensioneR][dimensioneC];
+
+    for(int i = 0; i<dimensioneR; i++){
+        for(int j = 0; j<dimensioneC; j++){
+            this.casella[i][j] = new casella();
+        }
+    }
     }
     public int getDim(){
         return this.dimensioneR;
@@ -15,43 +25,65 @@ public class Griglia{
     }
 
 
-    public void stampa(int x, int y) {
+    public void stampa(int sR, int sC) {
     for (int i = 0; i < dimensioneR; i++) {
         for (int j = 0; j < dimensioneC; j++) {
-            System.out.print("["); // bordo iniziale della riga
-            if(i == x && j == y){
-                System.out.print("S"); // cella e bordo verticale
+            if(i == sR && j == sC){
+                casella[i][j].stampa_seme();
             }
             else
-                System.out.print("."); // bordo iniziale della riga
-            System.out.print("]"); // bordo iniziale della riga
+                casella[i][j].stampa_casella();
         }
         System.out.println(); // vai a capo alla fine della riga 
     }
     }
-    
-    public int mossa(Punto p, int sR, int sC){
-        int i, r = 0, stop = 0;
-        if(p.x == sR && p.y == sC){
-            r = 1;
-            return r ; 
+
+    public int sposta(int i,Punto p,int dimensioneR, int dimensioneC, int sR, int sC){
+        int[] mosseR = {0,-1,0,1};
+        int[] mosseC = {-1,0,1,0};
+
+        int x,y;
+        x = p.x + mosseR[i];
+        y = p.y + mosseC[i];
+
+        if((x<0 || y <0) || (x >= dimensioneR || y >= dimensioneC) || (casella[x][y].isVisited() == true)){
+            return -1;
         }
-        else{
-            Punto p1 = new Punto(p.x, p.y);
-            for(i = 0; stop != 1 && i<4; i++){
-                p1 = p1.sposta(p,i);
-                if(p1.x != p.x || p1.y != p.y){
-
-                }
-
-            }
-
+        else if( x == sR && y == sC){
+            p.x = x;
+            p.y = y; 
+            return 1;
         }
-        return 1; // da continuare
+
+        
+            p.x = x;
+            p.y = y;
+            casella[x][y].setVisited(true);
+            return 0;
+        
     }
 
+    public void mossa(int terminale, int sR, int sC, Punto p){
+        int i,r = 0 ;
+        casella[p.x][p.y].setVisited(true);
 
+        if(terminale == 1){
+            stampa(sR, sC);
+            found=1;
+            return;
+        }
 
-    
+        for(i = 0; found!=1 && i<4;i++){
+            r = sposta(i, p, dimensioneR, dimensioneC, sR, sC);
+            if (r == 1){
+                mossa(1,sR,sC,p);
+            }
+            if(r == 0){
+                mossa(0,sR,sC,p);
+            }
+        }
+        casella[p.x][p.y].setVisited(false);
+        return;
+    }
+
 }
-

@@ -6,7 +6,8 @@ public class provaGitHub {
 
 
         Griglia griglia = new Griglia(7,7);
-        griglia.stampa(3,2);
+        Punto p = new Punto(0, 0);
+        griglia.mossa(0,3,2,p);
     }
 
     
