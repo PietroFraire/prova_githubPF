@@ -1,0 +1,1 @@
+Il mini-progetto nasce come una prova di github da parte di due studenti di ingegneria informatica del POLITO, cerca di mischiare la potenza delle classi in Java con una ricerca su una griglia vista nel corso di Algoritmi e strutture dati
